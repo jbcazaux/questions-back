@@ -8,10 +8,20 @@ const questions = [{id: '1', label: 'default question'}];
 const typeDefs = `
   type Query { questions: [Question]! }
   type Question { id: String!, label: String! }
+  type Mutation { addQuestion(label: String!): Question}
 `;
 const resolvers = {
     Query: {
         questions: () => questions
+    },
+    Mutation: {
+        addQuestion: (root, args) => {
+            const newQuestion = { label: args.label ,
+                id: new Date().getTime()};
+            questions.push(newQuestion);
+
+            return newQuestion;
+        },
     },
 };
 const schema = makeExecutableSchema({typeDefs, resolvers});
